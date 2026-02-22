@@ -64,7 +64,18 @@ fi
 echo ""
 echo "Ditchfork $TAG installed to $INSTALL_DIR/$BINARY_NAME"
 
-# ── Systemd (optional) ────────────────────────────────────────────────────────
+# ── Update path: if already running as a service, restart and exit ────────────
+
+SERVICE_FILE="/etc/systemd/system/ditchfork.service"
+
+if command -v systemctl > /dev/null 2>&1 && [ -f "$SERVICE_FILE" ]; then
+  echo "Existing service detected — restarting..."
+  sudo systemctl restart ditchfork
+  echo "Done. Ditchfork $TAG is running."
+  exit 0
+fi
+
+# ── Fresh install: offer systemd setup ───────────────────────────────────────
 
 if command -v systemctl > /dev/null 2>&1; then
   echo ""
@@ -73,7 +84,6 @@ if command -v systemctl > /dev/null 2>&1; then
 
   if [ "$SETUP_SERVICE" = "y" ] || [ "$SETUP_SERVICE" = "Y" ]; then
     DATA_DIR="/var/lib/ditchfork"
-    SERVICE_FILE="/etc/systemd/system/ditchfork.service"
 
     # Create a dedicated user if it doesn't exist
     if ! id -u ditchfork > /dev/null 2>&1; then
@@ -112,6 +122,7 @@ EOF
     echo "  sudo systemctl restart ditchfork"
     echo "  sudo systemctl stop ditchfork"
     echo "Data is stored in $DATA_DIR"
+    exit 0
   fi
 fi
 

@@ -57,6 +57,12 @@ curl -fsSL https://raw.githubusercontent.com/lawi22/ditchfork/main/install.sh | 
 
 This downloads the right binary for your machine, installs it to `/usr/local/bin`, and (optionally) sets it up to start automatically with systemd.
 
+### Updating
+
+Run the same command again to update. The script detects your existing installation and handles it automatically — if you're running it as a service, it will swap the binary and restart with no further questions.
+
+If you downloaded the binary manually, just download the new version from the [Releases page](https://github.com/lawi22/ditchfork/releases/latest) and replace the old file.
+
 ---
 
 ## What you get
