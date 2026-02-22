@@ -82,6 +82,16 @@ Once you're logged in, you can:
 
 Everything is stored in a single SQLite file (`ditchfork.db`) next to the binary. Back it up to back up your whole blog.
 
+### Make it yours
+
+Change the site name, colors, and accent to match your taste — no code needed.
+
+![Settings page](docs/df-customization.png)
+
+![Metalfork — dark theme example](docs/df-custom-example-1.png)
+
+![Cutefork — light pastel example](docs/df-custom-example-2.png)
+
 ---
 
 ## Configuration
