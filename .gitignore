@@ -1,0 +1,6 @@
+.DS_Store
+ditchfork
+ditchfork-arm
+ditchfork.db
+uploads/
+.env

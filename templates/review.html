@@ -1,0 +1,31 @@
+{{define "title"}}{{if .Review.Artist}}{{.Review.Artist}} — {{end}}{{.Review.Title}} | {{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}}{{end}}
+{{define "content"}}
+<article class="review">
+    <header class="review-header">
+        <div class="review-top">
+            {{if .Review.CoverPath}}
+            <img src="/uploads/{{.Review.CoverPath}}" alt="{{if .Review.Artist}}{{.Review.Artist}} — {{end}}{{.Review.Title}}" class="review-cover">
+            {{end}}
+            <div class="review-meta">
+                <span class="review-type">{{typeLabel .Review.Type}}{{if isArticle .Review.Type}} — {{.Review.ArticleType}}{{end}}</span>
+                <h1 class="review-title">{{.Review.Title}}</h1>
+                {{if .Review.Artist}}<p class="review-artist">{{.Review.Artist}}</p>{{end}}
+                {{if .Review.Subheader}}
+                <p class="review-subheader">{{.Review.Subheader}}</p>
+                {{end}}
+                {{if not (isArticle .Review.Type)}}
+                <div class="review-rating">
+                    <span class="rating-big">{{fmtRating .Review.Rating}}</span>
+                    <span class="rating-max">/{{fmtRating .MaxRating}}</span>
+                </div>
+                {{end}}
+                <time class="review-date">{{.Review.CreatedAt.Format "January 2, 2006"}}</time>
+            </div>
+        </div>
+    </header>
+    <div class="review-body">
+        {{.ReviewBodyHTML}}
+    </div>
+    <a href="/" class="back-link">&larr; Back to reviews</a>
+</article>
+{{end}}

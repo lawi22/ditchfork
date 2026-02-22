@@ -1,0 +1,20 @@
+{{define "title"}}Login | {{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}} Admin{{end}}
+{{define "content"}}
+<div class="auth-form">
+    <h1>Admin Login</h1>
+    {{if .Error}}
+    <div class="alert alert-error">{{.Error}}</div>
+    {{end}}
+    <form method="POST" action="/admin/login">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Log In</button>
+    </form>
+</div>
+{{end}}

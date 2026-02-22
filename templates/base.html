@@ -1,0 +1,37 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}{{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}}{{end}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    {{with .Settings}}
+    <style>
+        :root {
+            --nav-bg: {{index . "nav_bg_color"}};
+            --bg: {{index . "page_bg_color"}};
+            --accent: {{index . "accent_color"}};
+        }
+    </style>
+    {{end}}
+</head>
+<body>
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">{{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}}</a>
+        </div>
+        {{block "subnav" .}}{{end}}
+    </nav>
+    <main class="container">
+        {{block "content" .}}{{end}}
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{.Year}} {{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}}</p>
+        </div>
+    </footer>
+</body>
+</html>{{end}}

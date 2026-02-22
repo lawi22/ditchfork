@@ -1,0 +1,39 @@
+{{define "title"}}{{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}} — Reviews{{end}}
+{{define "subnav"}}
+<div class="tabs container">
+    <a href="/" class="tab{{if eq .ActiveTab "all"}} active{{end}}">Feed</a>
+    {{range .ContentTypes}}
+    <a href="/?tab={{.Table}}" class="tab{{if eq $.ActiveTab .Table}} active{{end}}">{{.Plural}}</a>
+    {{end}}
+</div>
+{{end}}
+{{define "content"}}
+<h2 class="section-title">{{.SectionTitle}}</h2>
+{{if .Reviews}}
+<div class="album-grid">
+    {{range .Reviews}}
+    <a href="/music/{{typePath .Type}}/{{.Slug}}" class="album-card {{ratingClass .Rating .Type}}">
+        <div class="card-cover-wrap">
+            {{if .CoverPath}}
+            <img src="/uploads/{{.CoverPath}}" alt="{{if .Artist}}{{.Artist}} — {{end}}{{.Title}}" class="album-cover">
+            {{else}}
+            <div class="album-cover album-cover-placeholder"></div>
+            {{end}}
+            {{if isArticle .Type}}
+            <span class="card-article-type">{{.ArticleType}}</span>
+            {{else}}
+            <span class="card-rating {{ratingClass .Rating .Type}}">{{fmtRating .Rating}}</span>
+            {{end}}
+        </div>
+        <div class="album-info">
+            {{if .Artist}}<span class="album-artist">{{.Artist}}</span>{{end}}
+            <span class="album-title">{{.Title}}</span>
+            <span class="album-type">{{typeLabel .Type}}</span>
+        </div>
+    </a>
+    {{end}}
+</div>
+{{else}}
+<p class="empty-state">Nothing here yet.</p>
+{{end}}
+{{end}}

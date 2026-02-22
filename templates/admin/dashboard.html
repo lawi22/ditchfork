@@ -1,0 +1,47 @@
+{{define "title"}}Dashboard | {{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}} Admin{{end}}
+{{define "content"}}
+<div class="admin-header">
+    <h1>Dashboard</h1>
+    <div class="admin-actions">
+        <a href="/admin/reviews/new" class="btn btn-primary">Add New</a>
+        <a href="/admin/settings" class="btn btn-secondary">Settings</a>
+        <form method="POST" action="/admin/logout" style="display:inline">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </div>
+</div>
+{{if .Reviews}}
+<table class="review-table">
+    <thead>
+        <tr>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Rating</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .Reviews}}
+        <tr>
+            <td>{{if .Artist}}{{.Artist}}{{else}}—{{end}}</td>
+            <td>{{.Title}}</td>
+            <td>{{typeLabel .Type}}</td>
+            <td>{{if isArticle .Type}}{{.ArticleType}}{{else}}{{fmtRating .Rating}}/{{fmtRating (maxRating .Type)}}{{end}}</td>
+            <td>{{.CreatedAt.Format "2006-01-02"}}</td>
+            <td class="actions">
+                <a href="/admin/{{.Type}}/{{.ID}}/edit" class="btn btn-small">Edit</a>
+                <form method="POST" action="/admin/{{.Type}}/{{.ID}}/delete" style="display:inline"
+                      onsubmit="return confirm('Delete this?')">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+{{else}}
+<p class="empty-state">No reviews yet. <a href="/admin/reviews/new">Create one!</a></p>
+{{end}}
+{{end}}

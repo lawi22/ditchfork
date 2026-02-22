@@ -1,0 +1,126 @@
+{{define "title"}}{{if .IsNew}}New{{else}}Edit{{end}} {{if .IsArticle}}Article{{else}}Review{{end}} | {{with .Settings}}{{index . "site_title"}}{{else}}Ditchfork{{end}} Admin{{end}}
+{{define "content"}}
+<h1>{{if .IsNew}}New{{else}}Edit{{end}} {{if .IsArticle}}Article{{else}}Review{{end}}</h1>
+{{if .Error}}
+<div class="alert alert-error">{{.Error}}</div>
+{{end}}
+
+{{if .IsNew}}
+<form method="POST" action="/admin/reviews" enctype="multipart/form-data">
+{{else}}
+<form method="POST" action="/admin/{{.Review.Type}}/{{.Review.ID}}" enctype="multipart/form-data">
+{{end}}
+    {{if .IsNew}}
+    <div class="form-group">
+        <label for="type">Type *</label>
+        <select id="type" name="type" required onchange="updateFormForType()">
+            {{range .ContentTypes}}
+            <option value="{{.Table}}" data-max="{{.MaxRating}}"{{if and $.Form (eq (index $.Form "type") .Table)}} selected{{end}}>{{.Singular}}</option>
+            {{end}}
+        </select>
+    </div>
+    {{end}}
+    <div class="form-group" id="artist-group"{{if .IsArticle}} style="display:none"{{end}}>
+        <label for="artist">Artist *</label>
+        <input type="text" id="artist" name="artist"{{if not .IsArticle}} required{{end}}
+               value="{{if .IsNew}}{{with .Form}}{{index . "artist"}}{{end}}{{else}}{{.Review.Artist}}{{end}}">
+    </div>
+    <div class="form-group">
+        <label for="title">Title *</label>
+        <input type="text" id="title" name="title" required
+               value="{{if .IsNew}}{{with .Form}}{{index . "title"}}{{end}}{{else}}{{.Review.Title}}{{end}}">
+    </div>
+    <div class="form-group">
+        <label for="subheader">Subheader</label>
+        <input type="text" id="subheader" name="subheader"
+               value="{{if .IsNew}}{{with .Form}}{{index . "subheader"}}{{end}}{{else}}{{.Review.Subheader}}{{end}}">
+    </div>
+    <div class="form-group" id="article-type-group"{{if not .IsArticle}} style="display:none"{{end}}>
+        <label for="article_type">Article Type *</label>
+        <select id="article_type" name="article_type">
+            {{$selAT := ""}}
+            {{if not .IsNew}}{{$selAT = .Review.ArticleType}}{{else if .Form}}{{$selAT = index .Form "article_type"}}{{end}}
+            {{range .ArticleTypes}}
+            <option value="{{.}}"{{if eq . $selAT}} selected{{end}}>{{.}}</option>
+            {{end}}
+        </select>
+    </div>
+    <div class="form-group" id="rating-group"{{if .IsArticle}} style="display:none"{{end}}>
+        <label for="rating">Rating (<span id="rating-range">0–10.0</span>)</label>
+        <input type="number" id="rating" name="rating" min="0" step="0.1"
+               max="10.0"
+               value="{{if .IsNew}}{{with .Form}}{{index . "rating"}}{{end}}{{else}}{{fmtRating .Review.Rating}}{{end}}">
+    </div>
+    <div class="form-group">
+        <label for="cover">Cover Image (jpeg, png, webp — max 5MB)</label>
+        {{if not .IsNew}}
+            {{if .Review.CoverPath}}
+            <div class="current-cover">
+                <img src="/uploads/{{.Review.CoverPath}}" alt="Current cover" style="max-width:200px">
+                <p class="help-text">Upload a new image to replace the current cover.</p>
+            </div>
+            {{end}}
+        {{end}}
+        <input type="file" id="cover" name="cover" accept="image/jpeg,image/png,image/webp">
+    </div>
+    <div class="form-group">
+        <label for="body">Body (HTML)</label>
+        <div class="toolbar">
+            <button type="button" onclick="wrapTag('b')" title="Bold"><b>B</b></button>
+            <button type="button" onclick="wrapTag('i')" title="Italic"><i>I</i></button>
+            <button type="button" onclick="wrapTag('h2')" title="Heading">H2</button>
+            <button type="button" onclick="wrapTag('h3')" title="Subheading">H3</button>
+            <button type="button" onclick="insertLink()" title="Link">Link</button>
+            <button type="button" onclick="wrapTag('blockquote')" title="Quote">Quote</button>
+            <button type="button" onclick="wrapTag('p')" title="Paragraph">P</button>
+        </div>
+        <textarea id="body" name="body" rows="20">{{if .IsNew}}{{with .Form}}{{index . "body"}}{{end}}{{else}}{{.Review.Body}}{{end}}</textarea>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{if .IsNew}}Create{{else}}Save{{end}}</button>
+        <a href="/admin/" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<script>
+function wrapTag(tag) {
+    var ta = document.getElementById('body');
+    var start = ta.selectionStart, end = ta.selectionEnd;
+    var sel = ta.value.substring(start, end);
+    var before = ta.value.substring(0, start);
+    var after = ta.value.substring(end);
+    ta.value = before + '<' + tag + '>' + sel + '</' + tag + '>' + after;
+    ta.focus();
+    ta.selectionStart = start + tag.length + 2;
+    ta.selectionEnd = ta.selectionStart + sel.length;
+}
+function insertLink() {
+    var ta = document.getElementById('body');
+    var start = ta.selectionStart, end = ta.selectionEnd;
+    var sel = ta.value.substring(start, end);
+    var url = prompt('Enter URL:', 'https://');
+    if (!url) return;
+    var before = ta.value.substring(0, start);
+    var after = ta.value.substring(end);
+    var text = sel || 'link text';
+    ta.value = before + '<a href="' + url + '">' + text + '</a>' + after;
+    ta.focus();
+}
+function updateFormForType() {
+    var sel = document.getElementById('type');
+    var opt = sel.options[sel.selectedIndex];
+    var max = opt.getAttribute('data-max');
+    var isArticle = sel.value === 'articles';
+
+    document.getElementById('artist-group').style.display = isArticle ? 'none' : '';
+    document.getElementById('article-type-group').style.display = isArticle ? '' : 'none';
+    document.getElementById('rating-group').style.display = isArticle ? 'none' : '';
+    document.getElementById('artist').required = !isArticle;
+
+    if (!isArticle) {
+        document.getElementById('rating').max = '10.0';
+        document.getElementById('rating-range').textContent = '0\u201310.0';
+    }
+}
+</script>
+{{end}}
