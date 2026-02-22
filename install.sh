@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-REPO="yourusername/ditchfork"
+REPO="lawi22/ditchfork"
 INSTALL_DIR="/usr/local/bin"
 BINARY_NAME="ditchfork"
 
