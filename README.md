@@ -1,8 +1,12 @@
 # Ditchfork
 
-Your own music review blog. Write album reviews, song reviews, and articles — just like Pitchfork, but yours.
+Pitchfork just became paywalled. Ditchfork enables you to create your own Pitchfork clone with an easy-to-use admin dashboard for uploading your own album reviews, song reviews, or articles. 
+
+You have lightweight customization for colors and site name :)
 
 No cloud accounts. No monthly fees. One file, runs anywhere.
+Find installation and setup guide below.
+Thank you to Claude Code for CICD and README.
 
 ---
 
