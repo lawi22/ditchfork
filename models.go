@@ -64,10 +64,12 @@ var validArticleTypes = []string{"News", "Opinion", "List"}
 
 // Settings keys and defaults
 const (
-	SettingSiteTitle  = "site_title"
-	SettingNavBgColor = "nav_bg_color"
+	SettingSiteTitle   = "site_title"
+	SettingNavBgColor  = "nav_bg_color"
 	SettingPageBgColor = "page_bg_color"
 	SettingAccentColor = "accent_color"
+	SettingTextColor   = "text_color"
+	SettingBrandColor  = "brand_color"
 )
 
 var settingDefaults = map[string]string{
@@ -75,6 +77,8 @@ var settingDefaults = map[string]string{
 	SettingNavBgColor:  "#111111",
 	SettingPageBgColor: "#ffffff",
 	SettingAccentColor: "#d62828",
+	SettingTextColor:   "#111111",
+	SettingBrandColor:  "#ffffff",
 }
 
 var allowedSettingKeys = map[string]bool{
@@ -82,4 +86,6 @@ var allowedSettingKeys = map[string]bool{
 	SettingNavBgColor:  true,
 	SettingPageBgColor: true,
 	SettingAccentColor: true,
+	SettingTextColor:   true,
+	SettingBrandColor:  true,
 }
