@@ -2,7 +2,8 @@
 
 Pitchfork just became paywalled. Ditchfork enables you to create your own Pitchfork clone with an easy-to-use admin dashboard for uploading your own album reviews, song reviews, or articles. 
 
-You have lightweight customization for colors and site name :)
+You have lightweight customization for colors and site name :) Data is stored in your SQLLite .db file making backups simple (literally ctrl c+v), why not keep your logs in a cool environment like your own blog!
+
 
 No cloud accounts. No monthly fees. One file, runs anywhere.
 Find installation and setup guide below.
