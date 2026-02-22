@@ -8,6 +8,8 @@ No cloud accounts. No monthly fees. One file, runs anywhere.
 Find installation and setup guide below.
 Thank you to Claude Code for CICD and README.
 
+![Feed](docs/df-feed.png)
+
 ---
 
 ## Quick start
@@ -66,6 +68,10 @@ If you downloaded the binary manually, just download the new version from the [R
 ---
 
 ## What you get
+
+![Admin dashboard](docs/df-admin.png)
+
+![Create a review](docs/df-create-review.png)
 
 Once you're logged in, you can:
 
